@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ഗണിതം — സ്റ്റാൻഡേർഡ് IX | യൂണിറ്റ് 4: ഗുണനസമവാക്യങ്ങൾ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+body{font-family:'Noto Sans Malayalam',sans-serif;background:#f0fdf4;color:#0f172a}
+.app-container{max-width:800px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}
+.screen{display:none;padding:20px;animation:fadeIn .3s}.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.btn-main{
+  padding: 14px 20px;
+  border-radius: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  color: #fff;
+  text-align: left;
+  font-size: 1.05rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  position: relative;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2), 0 10px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(0);
+}
+.btn-main:hover { filter: brightness(1.05); }
+.btn-main:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btn-action{
+  background: linear-gradient(to bottom, #16a34a, #15803d);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 5px 0 #166534, 0 8px 15px rgba(22, 163, 74, 0.3);
+  transition: all 0.1s ease;
+}
+.btn-action:active{
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #166534, 0 3px 5px rgba(22, 163, 74, 0.2);
+}
+.header{background:linear-gradient(135deg, #15803d, #16a34a);color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;border-radius:16px;margin-bottom:20px;box-shadow:0 4px 12px rgba(21, 128, 61, 0.2)}
+.header h1{font-size:1.1rem;font-weight:700;margin:0}
+.back-btn{background:rgba(255,255,255,.25);border:none;color:#fff;font-size:1.2rem;padding:6px 14px;border-radius:10px;cursor:pointer;transition:background 0.2s}
+.back-btn:hover{background:rgba(255,255,255,.4)}
+.category-card{background:#f8fafc;border:2px solid #e2e8f0;border-radius:20px;padding:18px;margin-bottom:20px;box-shadow:0 4px 6px rgba(0,0,0,0.02)}
+.category-title{font-size:1.25rem;font-weight:700;margin-bottom:16px;border-bottom:2px dashed #cbd5e1;padding-bottom:8px}
+.content-card{background:#fff;border:2px solid #bbf7d0;border-radius:16px;padding:20px;margin-bottom:16px;font-size:1.05rem;line-height:1.7;box-shadow:0 4px 12px rgba(187,247,208,0.3)}
+.quiz-opt,.match-item{
+  padding: 14px;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 0 #cbd5e1;
+  transition: all 0.1s ease;
+}
+.quiz-opt:active,.match-item:active{
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #cbd5e1;
+}
+.match-item.selected{background:#bbf7d0;border-color:#16a34a;box-shadow:0 2px 0 #16a34a}
+.match-item.matched{background:#dcfce7;border-color:#15803d;color:#15803d;box-shadow:none}
+.memory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.memory-card{aspect-ratio:1;background:linear-gradient(135deg, #22c55e, #16a34a);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:transparent;cursor:pointer;box-shadow:0 5px 0 #15803d;padding:6px;text-align:center;transition:all .2s}
+.memory-card.revealed,.memory-card.matched{background:#fff;color:#1f2937;border:2px solid #22c55e;box-shadow:none}
+.memory-card.matched{background:#dcfce7;border-color:#15803d}
+.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 28px;border-radius:12px;z-index:1000;display:none;opacity:0;font-weight:700;max-width:90%;text-align:center;font-size:1.1rem;box-shadow:0 10px 25px rgba(0,0,0,0.3);transition:opacity 0.3s}
+.toast.show{display:block;opacity:1}
+.race-track{height:44px;background:#e2e8f0;border-radius:22px;position:relative;margin:20px 0;border:2px solid #cbd5e1;box-shadow:inset 0 2px 4px rgba(0,0,0,0.1)}
+.car{font-size:2.2rem;position:absolute;top:-8px;left:0;transition:left .3s}
+input.game-input{width:100%;padding:12px;border:2px solid #cbd5e1;border-radius:12px;font-size:1.2rem;text-align:center;font-weight:700;margin-bottom:12px;outline:none;box-shadow:inset 0 2px 4px rgba(0,0,0,0.05)}
+input.game-input:focus{border-color:#16a34a}
+@media print{.no-print{display:none!important}}
+.formula-box{background:linear-gradient(135deg, #dcfce7, #bbf7d0);border:2px solid #16a34a;border-radius:14px;padding:14px;margin:12px 0;text-align:center;font-weight:700;box-shadow:0 4px 10px rgba(22,163,74,0.15)}
+</style>
+</head>
+<body>
+<div class="app-container">
+<div id="homeScreen" class="screen active">
+  <div class="text-center mb-6 pt-3">
+    <h1 class="text-3xl font-extrabold text-emerald-800">ഗണിതം — സ്റ്റാൻഡേർഡ് IX</h1>
+    <p class="text-emerald-600 font-bold text-xl mt-1">യൂണിറ്റ് 4: ഗുണനസമവാക്യങ്ങൾ</p>
+    <p class="text-sm text-gray-500 mt-2">തുകകളുടെ ഗുണനം • വ്യത്യാസ ഗുണനം • സർവസമവാക്യങ്ങൾ • ക്രിയാവിശേഷങ്ങൾ</p>
+  </div>
+  
+  <div class="category-card border-emerald-200"><h3 class="category-title text-emerald-800">📖 1. പഠിക്കാം (Learn)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <button class="btn-main" style="background: linear-gradient(to bottom, #16a34a, #15803d); box-shadow: 0 6px 0 #166534, 0 10px 20px rgba(22,163,74,0.3);" onclick="showScreen('learn1')"><span class="text-2xl">✖️</span> തുകകളുടെ ഗുണനം ($(x+y)(u+v)$)</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #22c55e, #16a34a); box-shadow: 0 6px 0 #15803d, 0 10px 20px rgba(34,197,94,0.3);" onclick="showScreen('learn2')"><span class="text-2xl">➖</span> വ്യത്യാസ ഗുണനം ($(x-y)(u-v)$)</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #10b981, #047857); box-shadow: 0 6px 0 #065f46, 0 10px 20px rgba(16,185,129,0.3);" onclick="showScreen('learn3')"><span class="text-2xl">➕</span> തുകയും വ്യത്യാസവും ($(x+y)(u-v)$)</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #14b8a6, #0f766e); box-shadow: 0 6px 0 #115e59, 0 10px 20px rgba(20,184,166,0.3);" onclick="showScreen('learn4')"><span class="text-2xl">🔄</span> അടുത്തടുത്ത സംഖ്യകളുടെ ഗുണനം</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #059669, #065f46); box-shadow: 0 6px 0 #022c22, 0 10px 20px rgba(5,150,105,0.3);" onclick="showScreen('learn5')"><span class="text-2xl">🔢</span> കലണ്ടർ & ഗണിത മാതൃകകൾ</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #0d9488, #115e59); box-shadow: 0 6px 0 #134e4a, 0 10px 20px rgba(13,148,136,0.3);" onclick="showScreen('learn6')"><span class="text-2xl">✨</span> ക്രിയാകൗതുകങ്ങൾ</button>
+    </div>
+  </div>
+
+  <div class="category-card border-pink-200"><h3 class="category-title text-pink-800">🎯 2. അഭ്യാസം (Practice)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <button class="btn-main" style="background: linear-gradient(to bottom, #ec4899, #be185d); box-shadow: 0 6px 0 #9d174d, 0 10px 20px rgba(236,72,153,0.3);" onclick="initPrac1();showScreen('prac1Screen')"><span class="text-2xl">✖️</span> തുകകളുടെ ഗുണനം പ്രാക്ടീസ്</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #f43f5e, #9f1239); box-shadow: 0 6px 0 #881337, 0 10px 20px rgba(244,63,94,0.3);" onclick="initPrac2();showScreen('prac2Screen')"><span class="text-2xl">➖</span> വ്യത്യാസ ഗുണനം പ്രാക്ടീസ്</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #d946ef, #a21caf); box-shadow: 0 6px 0 #86198f, 0 10px 20px rgba(217,70,239,0.3);" onclick="initPrac3();showScreen('prac3Screen')"><span class="text-2xl">➕</span> മിശ്രിത ഗുണനം</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #c026d3, #86198f); box-shadow: 0 6px 0 #701a75, 0 10px 20px rgba(192,38,211,0.3);" onclick="initPrac4();showScreen('prac4Screen')"><span class="text-2xl">🔄</span> അടുത്തടുത്ത സംഖ്യകൾ</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #db2777, #9d174d); box-shadow: 0 6px 0 #831843, 0 10px 20px rgba(219,39,119,0.3);" onclick="initPrac5();showScreen('prac5Screen')"><span class="text-2xl">🔢</span> കലണ്ടർ കണക്കുകൾ</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #e11d48, #881337); box-shadow: 0 6px 0 #700f2b, 0 10px 20px rgba(225,29,72,0.3);" onclick="initPrac6();showScreen('prac6Screen')"><span class="text-2xl">✨</span> ക്രിയാകൗതുകങ്ങൾ പ്രാക്ടീസ്</button>
+    </div>
+  </div>
+
+  <div class="category-card border-amber-200"><h3 class="category-title text-amber-800">🧩 3. ലോജിക് ചലഞ്ചുകൾ (Logic Challenges)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <button class="btn-main" style="background: linear-gradient(to bottom, #f59e0b, #b45309); box-shadow: 0 6px 0 #92400e, 0 10px 20px rgba(245,158,11,0.3);" onclick="initLog1();showScreen('log1Screen')"><span class="text-2xl">💡</span> വിസ്തീർണ്ണ മാതൃക</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #f97316, #c2410c); box-shadow: 0 6px 0 #9a3412, 0 10px 20px rgba(249,115,22,0.3);" onclick="initLog2();showScreen('log2Screen')"><span class="text-2xl">🔍</span> ഒറ്റസംഖ്യകളുടെ ഗുണനം</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #eab308, #a16207); box-shadow: 0 6px 0 #854d0e, 0 10px 20px rgba(234,179,8,0.3);" onclick="initLog3();showScreen('log3Screen')"><span class="text-2xl">📈</span> രണ്ടക്ക സംഖ്യകളുടെ കൗതുകം</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #84cc16, #4d7c0f); box-shadow: 0 6px 0 #3f6212, 0 10px 20px rgba(132,204,22,0.3);" onclick="initLog4();showScreen('log4Screen')"><span class="text-2xl">📏</span> ഗുണിതപ്പട്ടിക സവിശേഷതകൾ</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #ca8a04, #854d0e); box-shadow: 0 6px 0 #713f12, 0 10px 20px rgba(202,138,4,0.3);" onclick="initTFL();showScreen('tflScreen')"><span class="text-2xl">✅</span> ശരി / തെറ്റ് ചലഞ്ച്</button>
+    </div>
+  </div>
+
+  <div class="category-card border-teal-200"><h3 class="category-title text-teal-800">🎮 4. കളിച്ച് പഠിക്കാം (Play & Learn)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <button class="btn-main" style="background: linear-gradient(to bottom, #14b8a6, #0f766e); box-shadow: 0 6px 0 #115e59, 0 10px 20px rgba(20,184,166,0.3);" onclick="initMem();showScreen('memScreen')"><span class="text-2xl">🃏</span> മെമ്മറി ഗെയിം</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #10b981, #047857); box-shadow: 0 6px 0 #065f46, 0 10px 20px rgba(16,185,129,0.3);" onclick="initRace();showScreen('raceScreen')"><span class="text-2xl">🏎️</span> മാത്സ് റേസ്</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #22c55e, #15803d); box-shadow: 0 6px 0 #166534, 0 10px 20px rgba(34,197,94,0.3);" onclick="initQuick();showScreen('quickScreen')"><span class="text-2xl">⚡</span> സ്പീഡ് ക്വിസ്</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #06b6d4, #0891b2); box-shadow: 0 6px 0 #0e7490, 0 10px 20px rgba(6,182,212,0.3);" onclick="initTrueFalse();showScreen('tfScreen')"><span class="text-2xl">✅</span> ശരി അല്ലെങ്കിൽ തെറ്റ്</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #0d9488, #115e59); box-shadow: 0 6px 0 #134e4a, 0 10px 20px rgba(13,148,136,0.3);" onclick="initFillBlank();showScreen('fillBlankScreen')"><span class="text-2xl">✏️</span> ശൂന്യസ്ഥാനം പൂരിപ്പിക്കുക</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #059669, #065f46); box-shadow: 0 6px 0 #022c22, 0 10px 20px rgba(5,150,105,0.3);" onclick="initMatchGame();showScreen('matchGameScreen')"><span class="text-2xl">🔗</span> ജോടി ചേർക്കുക</button>
+    </div>
+  </div>
+
+  <div class="category-card border-emerald-200"><h3 class="category-title text-emerald-800">📝 5. പരീക്ഷ കോർണർ (Exam Corner)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <button class="btn-main" style="background: linear-gradient(to bottom, #0d9488, #0f766e); box-shadow: 0 6px 0 #115e59, 0 10px 20px rgba(13,148,136,0.3);" onclick="initQuiz();showScreen('quizScreen')"><span class="text-2xl">🏆</span> മെഗാ ക്വിസ് (20 ചോദ്യങ്ങൾ)</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #059669, #047857); box-shadow: 0 6px 0 #065f46, 0 10px 20px rgba(5,150,105,0.3);" onclick="showScreen('matchScreen')"><span class="text-2xl">🔗</span> ചേർത്തെഴുതുക</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #16a34a, #15803d); box-shadow: 0 6px 0 #166534, 0 10px 20px rgba(22,163,74,0.3);" onclick="showScreen('modelQPScreen')"><span class="text-2xl">📋</span> മോഡൽ ചോദ്യങ്ങൾ</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #65a30d, #4d7c0f); box-shadow: 0 6px 0 #3f6212, 0 10px 20px rgba(101,163,13,0.3);" onclick="showScreen('unitTestScreen')"><span class="text-2xl">📄</span> യൂണിറ്റ് ടെസ്റ്റ് പേപ്പർ</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #0f766e, #115e59); box-shadow: 0 6px 0 #134e4a, 0 10px 20px rgba(15,118,110,0.3);" onclick="initChapterTest();showScreen('chapterTestScreen')"><span class="text-2xl">📚</span> അധ്യായ പരീക്ഷ</button>
+      <button class="btn-main" style="background: linear-gradient(to bottom, #047857, #065f46); box-shadow: 0 6px 0 #022c22, 0 10px 20px rgba(4,120,87,0.3);" onclick="showScreen('selfAssessScreen')"><span class="text-2xl">📊</span> സ്വയം വിലയിരുത്തൽ</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEARN SCREENS -->
+<div id="learn1" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>തുകകളുടെ ഗുണനം</h1></div>
+  <div class="content-card space-y-3">
+    <p>രണ്ട് തുകകൾ തമ്മിൽ ഗുണിക്കുമ്പോൾ, ആദ്യത്തെ തുകയിലെ ഓരോ സംഖ്യയേയും രണ്ടാമത്തെ തുകയിലെ ഓരോ സംഖ്യകൊണ്ടും ഗുണിച്ച് ഗുണനഫലങ്ങൾ കൂട്ടണം.</p>
+    <div class="formula-box">$(x+y)(u+v) = xu + xv + yu + yv$<br>ഉദാഹരണത്തിന്: $26 \times 15 = (20+6) \times (10+5) = 200 + 100 + 60 + 30 = 390$.</div>
+  </div>
+</div>
+
+<div id="learn2" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>വ്യത്യാസ ഗുണനം</h1></div>
+  <div class="content-card space-y-3">
+    <p>രണ്ട് വ്യത്യാസങ്ങൾ തമ്മിൽ ഗുണിക്കുന്നതിനുള്ള ബീജഗണിത സമവാക്യം:</p>
+    <div class="formula-box">$(x-y)(u-v) = xu - xv - yu + yv$<br>ഇത് വലിയ സംഖ്യകളിൽ നിന്ന് ചെറിയ സംഖ്യകൾ കുറച്ച് ഗുണനം എളുപ്പമാക്കാൻ സഹായിക്കുന്നു.</div>
+  </div>
+</div>
+
+<div id="learn3" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>തുകയും വ്യത്യാസവും</h1></div>
+  <div class="content-card space-y-3">
+    <p>ഒരു തുകയും മറ്റൊരു വ്യത്യാസവും തമ്മിലുള്ള ഗുണനം:</p>
+    <div class="formula-box">$(x+y)(u-v) = xu - xv + yu - yv$<br>ഇത് മാനസിക കണക്കുകൂട്ടലുകൾക്കും വലിയ സംഖ്യകളുടെ ഗുണനത്തിനും വളരെ ഉപയോഗപ്രദമാണ്.</div>
+  </div>
+</div>
+
+<div id="learn4" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>അടുത്തടുത്ത സംഖ്യകളുടെ ഗുണനം</h1></div>
+  <div class="content-card space-y-3">
+    <p>തൊട്ടടുത്ത എണ്ണൽസംഖ്യകളുടെ ഗുണനഫലം കണ്ടെത്താനും സർവസമവാക്യങ്ങൾ സഹായിക്കുന്നു.</p>
+    <div class="formula-box">$(x+1)(y+1) = xy + x + y + 1$<br>തൊട്ടുപുറകിലുള്ള സംഖ്യകളുടെ ഗുണനം: $(x-1)(y-1) = xy - (x+y) + 1$.</div>
+  </div>
+</div>
+
+<div id="learn5" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>കലണ്ടർ & ഗണിത മാതൃകകൾ</h1></div>
+  <div class="content-card space-y-3">
+    <p>കലണ്ടറിലെ സമചതുരങ്ങളിൽ വരുന്ന നാല് സംഖ്യകളുടെ കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം എപ്പോഴും 7 ആണ്.</p>
+    <div class="formula-box">ഇത് ബീജഗണിത സമവാക്യങ്ങൾ ഉപയോഗിച്ച് എളുപ്പത്തിൽ തെളിയിക്കാം ($x(x+8) - (x+1)(x+7) = 7$).</div>
+  </div>
+</div>
+
+<div id="learn6" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ക്രിയാകൗതുകങ്ങൾ</h1></div>
+  <div class="content-card space-y-3">
+    <p>രണ്ട് രണ്ടക്ക സംഖ്യകളുടെ ഗുണനഫലവും അവയുടെ അക്കങ്ങൾ തിരിച്ചിട്ട കിട്ടുന്ന സംഖ്യകളുടെ ഗുണനഫലവും ഒന്നുതന്നെയാകാനുള്ള ഉപാധി ആദ്യത്തെ അക്കങ്ങളുടെ ഗുണനഫലവും രണ്ടാമത്തെ അക്കങ്ങളുടെ ഗുണനഫലവും തുല്യമാവുക എന്നതാണ് ($mp = nq$).</p>
+    <div class="formula-box">ഉദാഹരണത്തിന്: $32 \times 46 = 1472$ ഉം $23 \times 64 = 1472$ ഉം ആണ്.</div>
+  </div>
+</div>
+
+<!-- PRACTICE SCREENS -->
+<div id="prac1Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>തുകകളുടെ ഗുണനം പ്രാക്ടീസ്</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="p1Q"></p><div class="grid grid-cols-2 gap-3" id="p1Opts"></div></div>
+</div>
+<div id="prac2Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>വ്യത്യാസ ഗുണനം പ്രാക്ടീസ്</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="p2Q"></p><div class="grid grid-cols-2 gap-3" id="p2Opts"></div></div>
+</div>
+<div id="prac3Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>മിശ്രിത ഗുണനം പ്രാക്ടീസ്</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="p3Q"></p><div class="grid grid-cols-2 gap-3" id="p3Opts"></div></div>
+</div>
+<div id="prac4Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>അടുത്തടുത്ത സംഖ്യകൾ പ്രാക്ടീസ്</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="p4Q"></p><div class="grid grid-cols-2 gap-3" id="p4Opts"></div></div>
+</div>
+<div id="prac5Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>കലണ്ടർ കണക്കുകൾ പ്രാക്ടീസ്</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="p5Q"></p><div class="grid grid-cols-2 gap-3" id="p5Opts"></div></div>
+</div>
+<div id="prac6Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ക്രിയാകൗതുകങ്ങൾ പ്രാക്ടീസ്</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="p6Q"></p><div class="grid grid-cols-2 gap-3" id="p6Opts"></div></div>
+</div>
+
+<!-- LOGIC SCREENS -->
+<div id="log1Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>വിസ്തീർണ്ണ മാതൃക</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="l1Q"></p><div class="grid grid-cols-2 gap-3" id="l1Opts"></div></div>
+</div>
+<div id="log2Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ഒറ്റസംഖ്യകളുടെ ഗുണനം</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="l2Q"></p><div class="grid grid-cols-2 gap-3" id="l2Opts"></div></div>
+</div>
+<div id="log3Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>രണ്ടക്ക സംഖ്യകളുടെ കൗതുകം</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="l3Q"></p><div class="grid grid-cols-2 gap-3" id="l3Opts"></div></div>
+</div>
+<div id="log4Screen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ഗുണിതപ്പട്ടിക സവിശേഷതകൾ</h1></div>
+  <div class="content-card text-center"><p class="font-bold mb-3 text-lg" id="l4Q"></p><div class="grid grid-cols-2 gap-3" id="l4Opts"></div></div>
+</div>
+<div id="tflScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ശരി / തെറ്റ് ചലഞ്ച്</h1></div>
+  <div class="content-card text-center">
+    <p class="text-xl font-bold my-6" id="tflQ"></p>
+    <div class="grid grid-cols-2 gap-4 mt-6">
+      <button class="quiz-opt py-6 text-green-700 bg-green-50 border-green-300" onclick="checkTFL(true)">ശരി</button>
+      <button class="quiz-opt py-6 text-red-700 bg-red-50 border-red-300" onclick="checkTFL(false)">തെറ്റ്</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div id="memScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>മെമ്മറി ഗെയിം</h1></div>
+  <div class="content-card text-center">
+    <p class="mb-3 font-bold text-sm text-gray-600">പദവും ശരിയായ സങ്കൽപ്പവും ജോടി ചേർക്കുക</p>
+    <div class="memory-grid" id="memoryGrid"></div>
+    <div class="flex justify-between mt-4">
+      <p id="memoryMoves" class="font-bold text-emerald-600">നീക്കങ്ങൾ: 0</p>
+      <button class="btn-action py-1 px-4" onclick="initMem()">വീണ്ടും</button>
+    </div>
+  </div>
+</div>
+<div id="raceScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>മാത്സ് റേസ്</h1></div>
+  <div class="content-card text-center">
+    <div class="font-bold text-emerald-600 text-xl">സ്കോർ: <span id="racePts">0</span>/100</div>
+    <div class="race-track"><div class="car" id="raceCar">📐</div></div>
+    <p class="text-xl font-bold my-4" id="raceQ"></p>
+    <div class="grid grid-cols-2 gap-3" id="raceOpts"></div>
+  </div>
+</div>
+<div id="quickScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>സ്പീഡ് ക്വിസ്</h1></div>
+  <div class="content-card text-center">
+    <p class="text-xl font-bold my-6 min-h-[60px]" id="qkQ"></p>
+    <div class="grid grid-cols-2 gap-3" id="qkOpts"></div>
+    <p class="mt-6 font-bold text-2xl text-rose-600" id="qkScore">സ്കോർ: 0</p>
+  </div>
+</div>
+<div id="tfScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ശരി അല്ലെങ്കിൽ തെറ്റ്</h1></div>
+  <div class="content-card text-center">
+    <p class="text-xl font-bold my-6" id="tfQ"></p>
+    <div class="grid grid-cols-2 gap-4 mt-6">
+      <button class="quiz-opt py-6 text-green-700 bg-green-50 border-green-300" onclick="checkTF(true)">ശരി</button>
+      <button class="quiz-opt py-6 text-red-700 bg-red-50 border-red-300" onclick="checkTF(false)">തെറ്റ്</button>
+    </div>
+  </div>
+</div>
+<div id="fillBlankScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ശൂന്യസ്ഥാനം പൂരിപ്പിക്കുക</h1></div>
+  <div class="content-card text-center">
+    <p class="font-bold mb-3 text-lg">ശരിയായ പദം നൽകുക</p>
+    <p class="text-xl font-bold text-emerald-700 my-4" id="fbQ"></p>
+    <input id="fbAns" type="text" class="game-input" placeholder="ഉത്തരം ടൈപ്പ് ചെയ്യുക">
+    <button class="btn-action w-full mt-2" onclick="checkFillBlank()">പരിശോധിക്കുക</button>
+    <button class="bg-gray-200 font-bold w-full py-3 rounded-lg mt-3" onclick="initFillBlank()">അടുത്തത്</button>
+  </div>
+</div>
+<div id="matchGameScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ജോടി ചേർക്കുക</h1></div>
+  <div class="content-card"><div class="grid grid-cols-2 gap-4">
+    <div class="flex flex-col gap-3" id="mg-left"></div>
+    <div class="flex flex-col gap-3" id="mg-right"></div>
+  </div><button class="btn-action w-full mt-6" onclick="initMatchGame()">റീസെറ്റ്</button></div>
+</div>
+
+<!-- EXAM CORNER -->
+<div id="quizScreen" class="screen">
+  <div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>മെഗാ ക്വിസ്</h1>
+    <div id="quizProgress" class="font-bold bg-white text-emerald-700 px-3 py-1 rounded-lg">1/20</div>
+  </div>
+  <div class="content-card min-h-[300px]">
+    <div id="quizQuestionArea">
+      <h3 id="questionText" class="font-bold text-xl mb-6"></h3>
+      <div id="optionsGrid" class="grid gap-3"></div>
+    </div>
+    <div id="quizResultArea" style="display:none" class="text-center py-4">
+      <div class="text-7xl">🏆</div>
+      <h2 class="text-3xl font-bold text-emerald-600 my-3">ക്വിസ് പൂർത്തിയായി!</h2>
+      <p class="text-xl font-bold mb-6">സ്കോർ: <span id="finalScore" class="text-4xl text-emerald-600">0</span>/20</p>
+      <button class="btn-action w-full py-4" onclick="initQuiz()">വീണ്ടും കളിക്കുക</button>
+    </div>
+  </div>
+</div>
+
+<div id="matchScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>ചേർത്തെഴുതുക</h1></div>
+  <div class="content-card"><div class="grid grid-cols-2 gap-4">
+    <div class="flex flex-col gap-3" id="match-left">
+      <div class="match-item" data-id="a" onclick="selM('left',this)">$(x+y)(u+v)$</div>
+      <div class="match-item" data-id="b" onclick="selM('left',this)">$(x-y)(u-v)$</div>
+      <div class="match-item" data-id="c" onclick="selM('left',this)">$(x+y)(u-v)$</div>
+      <div class="match-item" data-id="d" onclick="selM('left',this)">$(x+1)(y+1)$</div>
+      <div class="match-item" data-id="e" onclick="selM('left',this)">കലണ്ടർ സമചതുരം</div>
+      <div class="match-item" data-id="f" onclick="selM('left',this)">രണ്ടക്ക സംഖ്യകൾ</div>
+    </div>
+    <div class="flex flex-col gap-3" id="match-right">
+      <div class="match-item" data-id="a" onclick="selM('right',this)">$xu + xv + yu + yv$</div>
+      <div class="match-item" data-id="b" onclick="selM('right',this)">$xu - xv - yu + yv$</div>
+      <div class="match-item" data-id="c" onclick="selM('right',this)">$xu - xv + yu - yv$</div>
+      <div class="match-item" data-id="d" onclick="selM('right',this)">$xy + x + y + 1$</div>
+      <div class="match-item" data-id="e" onclick="selM('right',this)">കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം 7</div>
+      <div class="match-item" data-id="f" onclick="selM('right',this)">$mp = nq$ എങ്കിൽ ഗുണനഫലം തുല്യം</div>
+    </div>
+  </div><button class="btn-action w-full mt-6" onclick="resetM()">റീസെറ്റ്</button></div>
+</div>
+
+<div id="modelQPScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>മോഡൽ ചോദ്യങ്ങൾ</h1></div>
+  <div class="content-card text-sm space-y-3">
+    <div class="text-center mb-3 border-b-2 pb-2"><h2 class="text-xl font-bold">മോഡൽ പേപ്പർ — ഗുണനസമവാക്യങ്ങൾ</h2></div>
+    <p>1. $(x+y)(u+v)$ വികിലെഴുതുക.</p>
+    <p>2. $31 \times 51$ എന്നത് സർവസമവാക്യം ഉപയോഗിച്ച് കണക്കാക്കുക.</p>
+    <p>3. കലണ്ടറിലെ സമചതുരത്തിൽ കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം എത്ര?</p>
+    <p>4. $(x-y)(u-v)$ വികിലെഴുതുക.</p>
+    <p>5. രണ്ടു എണ്ണൽസംഖ്യകളുടെ ഗുണനഫലം അറിയാമെങ്കിൽ തൊട്ടടുത്ത സംഖ്യകളുടെ ഗുണനഫലം കാണാനുള്ള സമവാക്യം എഴുതുക.</p>
+    <p>6. $32 \times 46$ എന്ന ഗുണനഫലത്തിന് തുല്യമായ മറ്റൊരു രണ്ടക്ക സംഖ്യാ ജോടി ഏത്?</p>
+    <button class="btn-action w-full mt-4" onclick="document.getElementById('modelAnswers').classList.toggle('hidden')">ഉത്തരങ്ങൾ കാണിക്കുക</button>
+    <div id="modelAnswers" class="hidden mt-3 p-3 bg-green-50 border border-green-200 rounded-xl space-y-2">
+      <p>1) $xu + xv + yu + yv$</p>
+      <p>2) $(30+1)(50+1) = 1500 + 30 + 50 + 1 = 1581$</p>
+      <p>3) 7</p>
+      <p>4) $xu - xv - yu + yv$</p>
+      <p>5) $xy + x + y + 1$</p>
+      <p>6) $23 \times 64 = 1472$</p>
+    </div>
+  </div>
+</div>
+
+<div id="unitTestScreen" class="screen">
+  <div class="header no-print"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>യൂണിറ്റ് ടെസ്റ്റ് പേപ്പർ</h1></div>
+  <div class="flex gap-3 mb-4 no-print px-4">
+    <button class="flex-1 bg-emerald-100 text-emerald-700 py-3 rounded-xl font-bold" onclick="window.print()">🖨️ പ്രിന്റ്</button>
+    <button class="flex-1 bg-rose-100 text-rose-700 py-3 rounded-xl font-bold" onclick="downloadPDF()">⬇️ PDF ഡൗൺലോഡ്</button>
+  </div>
+  <div class="content-card text-base mx-4 space-y-4" id="printableQP" style="padding:28px">
+    <div class="text-center mb-4 border-b-2 border-black pb-2">
+      <h2 class="text-2xl font-bold">യൂണിറ്റ് ടെസ്റ്റ്</h2>
+      <p>സ്റ്റാൻഡേർഡ് IX | ഗണിതം | Unit 4: ഗുണനസമവാക്യങ്ങൾ | സമയം: 45 മിനിറ്റ് | മാർക്ക്: 20</p>
+    </div>
+    <p class="font-bold text-lg">വിഭാഗം A (1 മാർക്ക്)</p>
+    <p>1. $(x+y)(u+v)$ എന്നതിന്റെ വിസ്തൃത രൂപം എഴുതുക.</p>
+    <p>2. കലണ്ടറിലെ സമചതുരത്തിൽ കോണോടുകോൺ വരുന്ന സംഖ്യകളുടെ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം എപ്പോഴും എത്രയാണ്?</p>
+    <p>3. $21 \times 71$ എത്രയാണ്?</p>
+    <p class="font-bold text-lg mt-4">വിഭാഗം B (2 മാർക്ക്)</p>
+    <p>4. $(x-y)(u-v)$ വികസിച്ച് എഴുതുക.</p>
+    <p>5. $38 \times 49$ എന്നത് വ്യത്യാസ ഗുണനരീതി ഉപയോഗിച്ച് കണക്കാക്കുക.</p>
+    <p>6. രണ്ടു ഒറ്റസംഖ്യകളുടെ ഗുണനഫലം എപ്പോഴും ഒറ്റസംഖ്യയായിരിക്കുമെന്ന് തെളിയിക്കുക.</p>
+    <p class="font-bold text-lg mt-4">വിഭാഗം C (3 മാർക്ക്)</p>
+    <p>7. അടുത്തടുത്ത നാല് എണ്ണൽസംഖ്യകളിൽ അറ്റത്തുള്ളവയുടെ ഗുണനഫലവും നടുക്കുള്ളവയുടെ ഗുണനഫലവും തമ്മിലുള്ള വ്യത്യാസം 2 ആണെന്ന് തെളിയിക്കുക.<br>8. $26 \times 17$ എന്നത് ബീജഗണിത സമവാക്യം ഉപയോഗിച്ച് കണക്കാക്കുക.</p>
+    <p class="font-bold text-lg mt-4">വിഭാഗം D (5 മാർക്ക്)</p>
+    <p>9. (a) രണ്ടു രണ്ടക്ക സംഖ്യകളുടെ ഗുണനഫലവും അവയുടെ അക്കങ്ങൾ തിരിച്ചിട്ട കിട്ടുന്ന സംഖ്യകളുടെ ഗുണനഫലവും ഒന്നുതന്നെയാകാനുള്ള ഉപാധി ($mp = nq$) വിശദീകരിക്കുക.<br>(b) $32 \times 46$ എന്നതിന് തുല്യമായ ഗുണനഫലം തരുന്ന മറ്റൊരു ജോടി സംഖ്യകൾ കണ്ടെത്തി സ്ഥിരീകരിക്കുക.</p>
+  </div>
+</div>
+
+<div id="chapterTestScreen" class="screen">
+  <div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>അധ്യായ പരീക്ഷ</h1>
+    <div id="ctProgress" class="font-bold bg-white text-emerald-700 px-3 py-1 rounded-lg">1/15</div>
+  </div>
+  <div class="content-card min-h-[300px]">
+    <div id="ctQuestionArea">
+      <h3 id="ctQuestionText" class="font-bold text-xl mb-6"></h3>
+      <div id="optionsGrid" class="grid gap-3"></div>
+    </div>
+    <div id="ctResultArea" style="display:none" class="text-center py-4">
+      <div class="text-7xl">📚</div>
+      <h2 class="text-3xl font-bold text-emerald-600 my-3">അധ്യായ പരീക്ഷ പൂർത്തിയായി!</h2>
+      <p class="text-xl font-bold mb-6">സ്കോർ: <span id="ctFinalScore" class="text-4xl text-emerald-600">0</span>/15</p>
+      <button class="btn-action w-full py-4" onclick="initChapterTest()">വീണ്ടും ശ്രമിക്കുക</button>
+    </div>
+  </div>
+</div>
+
+<div id="selfAssessScreen" class="screen"><div class="header"><button class="back-btn" onclick="showScreen('homeScreen')">⬅</button><h1>സ്വയം വിലയിരുത്തൽ</h1></div>
+  <div class="content-card space-y-4">
+    <p class="font-bold text-lg text-center">നിങ്ങളുടെ മനസ്സിലാക്കൽ നിരക്ക് (1–5)</p>
+    <div class="space-y-3">
+      <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg"><span>തുകകളുടെ ഗുണനം ($(x+y)(u+v)$)</span><select class="border rounded p-1 font-bold"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg"><span>വ്യത്യാസ ഗുണനം ($(x-y)(u-v)$)</span><select class="border rounded p-1 font-bold"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg"><span>അടുത്തടുത്ത സംഖ്യകളുടെ ഗുണനം</span><select class="border rounded p-1 font-bold"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg"><span>കലണ്ടർ & ഗുണിതപ്പട്ടിക സവിശേഷതകൾ</span><select class="border rounded p-1 font-bold"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg"><span>രണ്ടക്ക സംഖ്യകളുടെ ക്രിയാകൗതുകങ്ങൾ</span><select class="border rounded p-1 font-bold"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    </div>
+    <button class="btn-action w-full" onclick="showToast('സ്വയം വിലയിരുത്തൽ സേവ് ചെയ്തു!')">സേവ് ചെയ്യുക</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+</div>
+
+<script>
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showToast(m,d=2200,ok=true){const t=document.getElementById('toast');t.innerText=m;t.style.background=ok?'#16a34a':'#ef4444';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d);}
+function shuffle(a){return[...a].sort(()=>Math.random()-.5);}
+function mcq(q,o,bank,callback){const it=bank[Math.floor(Math.random()*bank.length)];document.getElementById(q).innerText=it.q;const box=document.getElementById(o);box.innerHTML='';shuffle(it.o).forEach(x=>{const b=document.createElement('button');b.className='quiz-opt py-3';b.innerText=x;b.onclick=()=>{if(x===it.a){showToast('ശരി!');setTimeout(callback,700);}else showToast('തെറ്റ്',1400,false);};box.appendChild(b);});}
+
+// Practice Inits
+function initPrac1(){const bank=[{q:'$(x+y)(u+v)$ എന്നതിന്റെ വിസ്തൃത രൂപം ഏത്?',a:'xu + xv + yu + yv',o:['xu + xv + yu + yv','xu - xv + yu - yv','xu + xv - yu - yv','xu - xv - yu - yv']}];mcq('p1Q','p1Opts',bank,initPrac1);}
+function initPrac2(){const bank=[{q:'$(x-y)(u-v)$ എന്നതിന്റെ വിസ്തൃത രൂപം ഏത്?',a:'xu - xv - yu + yv',o:['xu - xv - yu + yv','xu + xv + yu + yv','xu - xv + yu - yv','xu + xv - yu + yv']}];mcq('p2Q','p2Opts',bank,initPrac2);}
+function initPrac3(){const bank=[{q:'$(x+y)(u-v)$ എന്നതിന്റെ വിസ്തൃത രൂപം ഏത്?',a:'xu - xv + yu - yv',o:['xu - xv + yu - yv','xu + xv + yu + yv','xu - xv - yu + yv','xu + xv - yu - yv']}];mcq('p3Q','p3Opts',bank,initPrac3);}
+function initPrac4(){const bank=[{q:'തൊട്ടടുത്ത എണ്ണൽസംഖ്യകളുടെ ഗുണനഫലം കാണാനുള്ള സമവാക്യം ഏത്?',a:'xy + x + y + 1',o:['xy + x + y + 1','xy - x - y + 1','xy + x - y','xy - x + y']}];mcq('p4Q','p4Opts',bank,initPrac4);}
+function initPrac5(){const bank=[{q:'കലണ്ടറിലെ സമചതുരത്തിൽ കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം എപ്പോഴും എത്രയാണ്?',a:'7',o:['7','2','0','14']}];mcq('p5Q','p5Opts',bank,initPrac5);}
+function initPrac6(){const bank=[{q:'രണ്ട് രണ്ടക്ക സംഖ്യകളുടെ ഗുണനഫലം തുല്യമാകാനുള്ള ഉപാധി ഏത്?',a:'mp = nq',o:['mp = nq','m = p','n = q','mp + nq = 0']}];mcq('p6Q','p6Opts',bank,initPrac6);}
+
+// Logic Inits
+function initLog1(){const bank=[{q:'രണ്ട് തുകകളുടെ ഗുണനം ഏത് ജ്യാമിതീയ മാതൃകയിലൂടെ വിശദീകരിക്കാം?',a:'ചതുരത്തിന്റെ പരപ്പളവ്',o:['ചതുരത്തിന്റെ പരപ്പളവ്','ത്രികോണത്തിന്റെ ചുറ്റളവ്','വൃത്തത്തിന്റെ വിസ്തീർണ്ണം','ഘനചതുരത്തിന്റെ വ്യാപ്തം']}];mcq('l1Q','l1Opts',bank,initLog1);}
+function initLog2(){const bank=[{q:'രണ്ട് ഒറ്റസംഖ്യകളുടെ ഗുണനഫലം എപ്പോഴും എന്തായിരിക്കും?',a:'ഒറ്റസംഖ്യ',o:['ഒറ്റസംഖ്യ','ഇരട്ടസംഖ്യ','പൂജ്യം','അഭാജ്യസംഖ്യ']}];mcq('l2Q','l2Opts',bank,initLog2);}
+function initLog3(){const bank=[{q:'$32 \\times 46$ എന്ന ഗുണനഫലത്തിന് തുല്യമായ മറ്റൊരു രണ്ടക്ക സംഖ്യാ ജോടി ഏത്?',a:'$23 \\times 64$',o:['$23 \\times 64$','$34 \\times 26$','$21 \\times 35$','$42 \\times 33$']}];mcq('l3Q','l3Opts',bank,initLog3);}
+function initLog4(){const bank=[{q:'ഗുണിതപ്പട്ടികയിലെ സമചതുരങ്ങളിൽ കോണോടുകോൺ തുകകളുടെ വ്യത്യാസം എന്താണ്?',a:'1',o:['1','7','2','0']}];mcq('l4Q','l4Opts',bank,initLog4);}
+
+let currentTFL={};
+function initTFL(){const bank=[{q:'$(x+y)(u+v) = xu + xv + yu + yv$ ആണ്.',a:true},{q:'കലണ്ടറിലെ സമചതുരത്തിൽ കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം 5 ആണ്.',a:false},{q:'രണ്ട് ഒറ്റസംഖ്യകളുടെ ഗുണനഫലം എപ്പോഴും ഒറ്റസംഖ്യയാണ്.',a:true}];currentTFL=bank[Math.floor(Math.random()*bank.length)];document.getElementById('tflQ').innerText=currentTFL.q;}
+function checkTFL(ans){if(ans===currentTFL.a){showToast('ശരി!');setTimeout(initTFL,800);}else showToast('തെറ്റ്',1400,false);}
+
+// Games
+const memoryPairs=[{id:1,val:'$(x+y)(u+v)$'},{id:1,val:'xu + xv + yu + yv'},{id:2,val:'$(x-y)(u-v)$'},{id:2,val:'xu - xv - yu + yv'},{id:3,val:'$(x+y)(u-v)$'},{id:3,val:'xu - xv + yu - yv'},{id:4,val:'തൊട്ടടുത്ത സംഖ്യകൾ'},{id:4,val:'xy + x + y + 1'},{id:5,val:'കലണ്ടർ സമചതുരം'},{id:5,val:'വ്യത്യാസം 7'},{id:6,val:'ക്രിയാകൗതുകങ്ങൾ'},{id:6,val:'mp = nq'}];
+let flipped=[],matched=0,moves=0;
+function initMem(){const g=document.getElementById('memoryGrid');g.innerHTML='';flipped=[];matched=0;moves=0;document.getElementById('memoryMoves').innerText='നീക്കങ്ങൾ: 0';shuffle(memoryPairs).forEach(it=>{const c=document.createElement('div');c.className='memory-card font-bold';c.dataset.id=it.id;c.innerHTML='<div>'+it.val+'</div>';c.onclick=()=>flip(c);g.appendChild(c);});}
+function flip(card){if(flipped.length<2&&!card.classList.contains('revealed')&&!card.classList.contains('matched')){card.classList.add('revealed');flipped.push(card);if(flipped.length===2){moves++;document.getElementById('memoryMoves').innerText='നീക്കങ്ങൾ: '+moves;setTimeout(()=>{const[a,b]=flipped;if(a.dataset.id===b.dataset.id){a.classList.replace('revealed','matched');b.classList.replace('revealed','matched');matched+=2;if(matched===memoryPairs.length)showToast('നിങ്ങൾ ജയിച്ചു!');}else{a.classList.remove('revealed');b.classList.remove('revealed');}flipped=[];},700);}}}
+
+let racePts=0;
+function initRace(){racePts=0;document.getElementById('racePts').innerText=0;document.getElementById('raceCar').style.left='0%';nextRace();}
+function nextRace(){const bank=[{q:'$(x+y)(u+v)$ വികസിപ്പിച്ചാൽ xu+xv+yu+yv കിട്ടുമോ?',a:'ശരി',o:['ശരി','തെറ്റ്']},{q:'കലണ്ടർ സമചതുര വ്യത്യാസം 7 ആണോ?',a:'ശരി',o:['ശരി','തെറ്റ്']},{q:'രണ്ട് ഒറ്റസംഖ്യകളുടെ ഗുണനം ഒറ്റസംഖ്യയാണോ?',a:'ശരി',o:['ശരി','തെറ്റ്']}];const it=bank[Math.floor(Math.random()*bank.length)];document.getElementById('raceQ').innerText=it.q;const box=document.getElementById('raceOpts');box.innerHTML='';shuffle(it.o).forEach(o=>{const b=document.createElement('button');b.className='quiz-opt py-4 text-xl';b.innerText=o;b.onclick=()=>{if(o===it.a){racePts=Math.min(100,racePts+20);showToast('+20');}else showToast('തെറ്റ്',900,false);document.getElementById('racePts').innerText=racePts;document.getElementById('raceCar').style.left=racePts+'%';if(racePts>=100)showToast('ജയിച്ചു! 🏆',3000);else nextRace();};box.appendChild(b);});}
+
+let qkScore=0;
+function initQuick(){const bank=[{q:'$(x+y)(u+v)$ ഫലം?',a:'xu + xv + yu + yv',o:['xu + xv + yu + yv','xu - xv - yu + yv']},{q:'കലണ്ടർ വ്യത്യാസം?',a:'7',o:['7','2']}];const it=bank[Math.floor(Math.random()*bank.length)];document.getElementById('qkQ').innerText=it.q;const box=document.getElementById('qkOpts');box.innerHTML='';shuffle(it.o).forEach(o=>{const b=document.createElement('button');b.className='quiz-opt py-4 text-xl';b.innerText=o;b.onclick=()=>{if(o===it.a){qkScore++;showToast('+1');}else{qkScore=0;showToast('റീസെറ്റ്',1000,false);}document.getElementById('qkScore').innerText='സ്കോർ: '+qkScore;initQuick();};box.appendChild(b);});}
+
+let currentTF={};
+function initTrueFalse(){const bank=[{q:'$(x+y)(u+v) = xu + xv + yu + yv$ ആണ്.',a:true},{q:'കലണ്ടറിലെ സമചതുരത്തിൽ കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം 5 ആണ്.',a:false},{q:'രണ്ട് ഒറ്റസംഖ്യകളുടെ ഗുണനഫലം എപ്പോഴും ഒറ്റസംഖ്യയാണ്.',a:true}];currentTF=bank[Math.floor(Math.random()*bank.length)];document.getElementById('tfQ').innerText=currentTF.q;}
+function checkTF(ans){if(ans===currentTF.a){showToast('ശരി!');setTimeout(initTrueFalse,800);}else showToast('തെറ്റ്',1400,false);}
+
+let fillData={};
+function initFillBlank(){const bank=[{q:'$(x+y)(u+v)$ വികസിപ്പിച്ചെഴുതിയാൽ _____ കിട്ടും.',ans:'xu+xv+yu+yv'},{q:'കലണ്ടറിലെ സമചതുരങ്ങളിൽ കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം _____ ആണ്.',ans:'7'},{q:'തൊട്ടടുത്ത എണ്ണൽസംഖ്യകളുടെ ഗുണനഫലം കാണാനുള്ള സമവാക്യം _____ ആണ്.',ans:'xy+x+y+1'}];fillData=bank[Math.floor(Math.random()*bank.length)];document.getElementById('fbQ').innerText=fillData.q;document.getElementById('fbAns').value='';}
+function checkFillBlank(){if(document.getElementById('fbAns').value.replace(/\s/g,'').toLowerCase()===fillData.ans.replace(/\s/g,'').toLowerCase()){showToast('ശരി!');setTimeout(initFillBlank,800);}else showToast('തെറ്റ്',1400,false);}
+
+let mgL=null,mgR=null;
+function initMatchGame(){const left=[{id:'a',text:'$(x+y)(u+v)$'},{id:'b',text:'$(x-y)(u-v)$'},{id:'c',text:'$(x+y)(u-v)$'},{id:'d',text:'തൊട്ടടുത്ത സംഖ്യകൾ'}];const right=[{id:'a',text:'xu + xv + yu + yv'},{id:'b',text:'xu - xv - yu + yv'},{id:'c',text:'xu - xv + yu - yv'},{id:'d',text:'xy + x + y + 1'}];const l=document.getElementById('mg-left'),r=document.getElementById('mg-right');l.innerHTML='';r.innerHTML='';shuffle(left).forEach(it=>{const d=document.createElement('div');d.className='match-item';d.dataset.id=it.id;d.innerText=it.text;d.onclick=()=>selMG('left',d);l.appendChild(d);});shuffle(right).forEach(it=>{const d=document.createElement('div');d.className='match-item';d.dataset.id=it.id;d.innerText=it.text;d.onclick=()=>selMG('right',d);r.appendChild(d);});mgL=mgR=null;}
+function selMG(side,el){if(el.classList.contains('matched'))return;document.querySelectorAll('#mg-'+side+' .match-item:not(.matched)').forEach(i=>i.classList.remove('selected'));el.classList.add('selected');if(side==='left')mL=el;else mR=el;if(mL&&mR){if(mL.dataset.id===mR.dataset.id){mL.className=mR.className='match-item matched';showToast('ശരി!');}else{showToast('തെറ്റ്',800,false);mL.classList.remove('selected');mR.classList.remove('selected');}mL=mR=null;}}
+
+// Mega Quiz Data (20 Questions)
+const quizData=[
+{q:'$(x+y)(u+v)$ എന്നതിന്റെ വിസ്തൃത രൂപം ഏത്?',o:['xu + xv + yu + yv','xu - xv - yu + yv','xu + xv - yu - yv','xu - xv + yu - yv'],a:0},
+{q:'$(x-y)(u-v)$ എന്നതിന്റെ വിസ്തൃത രൂപം ഏത്?',o:['xu - xv - yu + yv','xu + xv + yu + yv','xu - xv + yu - yv','xu + xv - yu + yv'],a:0},
+{q:'$(x+y)(u-v)$ എന്നതിന്റെ വിസ്തൃത രൂപം ഏത്?',o:['xu - xv + yu - yv','xu + xv + yu + yv','xu - xv - yu + yv','xu + xv - yu - yv'],a:0},
+{q:'തൊട്ടടുത്ത എണ്ണൽസംഖ്യകളുടെ ഗുണനഫലം കാണാനുള്ള സമവാക്യം ഏത്?',o:['xy + x + y + 1','xy - x - y + 1','xy + x - y','xy - x + y'],a:0},
+{q:'കലണ്ടറിലെ സമചതുരത്തിൽ കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം എപ്പോഴും എത്രയാണ്?',o:['7','2','0','14'],a:0},
+{q:'രണ്ട് രണ്ടക്ക സംഖ്യകളുടെ ഗുണനഫലം തുല്യമാകാനുള്ള ഉപാധി ഏത്?',o:['mp = nq','m = p','n = q','mp + nq = 0'],a:0},
+{q:'$31 \\times 51$ എന്നത് സർവസമവാക്യം ഉപയോഗിച്ച് കണക്കാക്കുമ്പോൾ എത്ര കിട്ടും?',o:['1581','1500','1600','1481'],a:0},
+{q:'രണ്ട് തുകകൾ തമ്മിലുള്ള ഗുണനം ഏത് ജ്യാമിതീയ മാതൃകയിലൂടെ വിശദീകരിക്കാം?',o:['ചതുരത്തിന്റെ പരപ്പളവ്','ത്രികോണത്തിന്റെ ചുറ്റളവ്','വൃത്തത്തിന്റെ വിസ്തീർണ്ണം','ഘനചതുരത്തിന്റെ വ്യാപ്തം'],a:0},
+{q:'രണ്ട് ഒറ്റസംഖ്യകളുടെ ഗുണനഫലം എപ്പോഴും എന്തായിരിക്കും?',o:['ഒറ്റസംഖ്യ','ഇരട്ടസംഖ്യ','പൂജ്യം','അഭാജ്യസംഖ്യ'],a:0},
+{q:'$32 \\times 46$ എന്ന ഗുണനഫലത്തിന് തുല്യമായ മറ്റൊരു രണ്ടക്ക സംഖ്യാ ജോടി ഏത്?',o:['23 \\times 64','34 \\times 26','21 \\times 35','42 \\times 33'],a:0},
+{q:'ഗുണിതപ്പട്ടികയിലെ സമചതുരങ്ങളിൽ കോണോടുകോൺ തുകകളുടെ വ്യത്യാസം എന്താണ്?',o:['1','7','2','0'],a:0},
+{q:'$26 \\times 17$ എന്നതിന്റെ മൂല്യം എത്ര?',o:['442','450','422','462'],a:0},
+{q:'അടുത്തടുത്ത നാല് എണ്ണൽസംഖ്യകളിൽ അറ്റത്തുള്ളവയുടെ ഗുണനഫലവും നടുക്കുള്ളവയുടെ ഗുണനഫലവും തമ്മിലുള്ള വ്യത്യാസം എത്രയാണ്?',o:['2','1','0','4'],a:0},
+{q:'$(x-1)(y-1)$ വികസിപ്പിച്ചെഴുതിയാൽ എന്തു കിട്ടും?',o:['xy - x - y + 1','xy + x + y + 1','xy - x + y - 1','xy + x - y + 1'],a:0},
+{q:'പെട്രോളിയത്തിലെ ഘടകങ്ങളെ വേർതിരിക്കുന്ന വിദ്യ ഏത്?',o:['അംശികസ്വേദനം (Fractional distillation)','സബ്‌ളിമേഷൻ','അരിച്ചെടുക്കൽ','ബാഷ്പീകരണം'],a:0},
+{q:'രണ്ട് വ്യത്യാസങ്ങളുടെ ഗുണനഫലത്തിന്റെ സമവാക്യത്തിൽ അവസാന പദം എന്താണ്?',o:['+ yv','- yv','+ xu','- xv'],a:0},
+{q:'സംഖ്യകളുടെ തുകയും ഗുണനഫലവും അറിഞ്ഞാൽ വ്യത്യാസം കാണാൻ സഹായിക്കുന്ന സമവാക്യം ഏത്?',a:'$(x-y)^2 = (x+y)^2 - 4xy$',o:['$(x-y)^2 = (x+y)^2 - 4xy$','$(x+y)^2 = (x-y)^2 + 2xy$','$x^2 - y^2 = (x+y)(x-y)$','$(x+y)(u+v) = xu + xv$']},
+{q:'ചതുരത്തിന്റെ നീളം 3 മീറ്റർ കൂട്ടുകയും വീതി 2 മീറ്റർ കുറയ്ക്കുകയും ചെയ്താൽ പരപ്പളവ് 10 ചതുരശ്രമീറ്റർ കുറയും - ഈ ആശയത്തിന് അടിസ്ഥാനമായ സമവാക്യം ഏത്?',o:['$(x+y)(u-v)$','$ (x+y)(u+v)$','$(x-y)(u-v)$','$(x-1)(y-1)$']},
+{q:'$18 \\times 5$ കണക്കാക്കാൻ $(20-2) \\times 5$ എന്ന് എഴുതുന്നത് ഏത് നിയമത്തെ അടിസ്ഥാനമാക്കിയാണ്?',o:['വ്യത്യാസ ഗുണനം','തുകകളുടെ ഗുണനം','സംവഹന നിയമം','വിനിമയ നിയമം']},
+{q:'ബീജഗണിതത്തിൽ സർവസമവാക്യങ്ങൾ പ്രധാനമായും എന്തിനാണ് ഉപയോഗിക്കുന്നത്?',o:['ക്രിയകൾ എളുപ്പമാക്കാനും പൊതുതത്വങ്ങൾ തെളിയിക്കാനും','സങ്കീർണ്ണമാക്കാൻ','ചിത്രം വരയ്ക്കാൻ','അളവുകൾ മാറ്റാൻ']}
+];
+let qi=0,qs=0;
+function initQuiz(){qi=0;qs=0;document.getElementById('quizResultArea').style.display='none';document.getElementById('quizQuestionArea').style.display='block';loadQ();}
+function loadQ(){document.getElementById('quizProgress').innerText=(qi+1)+'/20';const q=quizData[qi];document.getElementById('questionText').innerText=(qi+1)+'. '+q.q;const og=document.getElementById('optionsGrid');og.innerHTML='';q.o.forEach((o,i)=>{const b=document.createElement('button');b.className='quiz-opt py-3 text-left pl-4';b.innerText=o;b.onclick=()=>chkQ(i,b);og.appendChild(b);});}
+function chkQ(i,btn){const c=quizData[qi].a;document.querySelectorAll('#optionsGrid .quiz-opt').forEach(b=>b.disabled=true);if(i===c){btn.classList.add('bg-green-100','border-emerald-500');qs++;}else{btn.classList.add('bg-red-100','border-rose-500');document.querySelectorAll('#optionsGrid .quiz-opt')[c].classList.add('bg-green-100','border-emerald-500');}setTimeout(()=>{qi++;if(qi<quizData.length)loadQ();else{document.getElementById('quizQuestionArea').style.display='none';document.getElementById('quizResultArea').style.display='block';document.getElementById('finalScore').innerText=qs;}},1000);}
+
+let mL=null,mR=null;
+function selM(side,el){if(el.classList.contains('matched'))return;document.querySelectorAll('#match-'+side+' .match-item:not(.matched)').forEach(i=>i.classList.remove('selected'));el.classList.add('selected');if(side==='left')mL=el;else mR=el;if(mL&&mR){if(mL.dataset.id===mR.dataset.id){mL.className=mR.className='match-item matched';showToast('ശരി!');}else{showToast('തെറ്റ്',800,false);mL.classList.remove('selected');mR.classList.remove('selected');}mL=mR=null;}}
+function resetM(){document.querySelectorAll('#matchScreen .match-item').forEach(e=>e.className='match-item');mL=mR=null;}
+
+const ctData=[
+{q:'$(x+y)(u+v)$?',o:['xu + xv + yu + yv','xu - xv - yu + yv'],a:0},
+{q:'$(x-y)(u-v)$?',o:['xu - xv - yu + yv','xu + xv + yu + yv'],a:0},
+{q:'$(x+y)(u-v)$?',o:['xu - xv + yu - yv','xu + xv + yu + yv'],a:0},
+{q:'തൊട്ടടുത്ത സംഖ്യകൾ?',o:['xy + x + y + 1','xy - x - y + 1'],a:0},
+{q:'കലണ്ടർ സമചതുരം വ്യത്യാസം?',o:['7','1'],a:0},
+{q:'രണ്ടക്ക സംഖ്യകളുടെ ഉപാധി?',o:['mp = nq','m = p'],a:0},
+{q:'വിസ്തീർണ്ണ മാതൃക?',o:['ചതുരത്തിന്റെ പരപ്പളവ്','ത്രികോണത്തിന്റെ ചുറ്റളവ്'],a:0},
+{q:'ഒറ്റസംഖ്യകളുടെ ഗുണനം?',o:['ഒറ്റസംഖ്യ','ഇരട്ടസംഖ്യ'],a:0},
+{q:'ഗുണിതപ്പട്ടിക സമചതുര വ്യത്യാസം?',o:['1','7'],a:0},
+{q:'$26 \\times 17$ വില?',o:['442','450'],a:0},
+{q:'അടുത്തടുത്ത നാല് എണ്ണൽസംഖ്യകൾ വ്യത്യാസം?',o:['2','1'],a:0},
+{q:'$(x-1)(y-1)$?',o:['xy - x - y + 1','xy + x + y + 1'],a:0},
+{q:'വ്യത്യാസ ഗുണന ഫലം?',o:['xu - xv - yu + yv','xu + xv + yu + yv'],a:0},
+{q:'തുകയും ഗുണനഫലവും അറിഞ്ഞാൽ?',a:'$(x-y)^2 = (x+y)^2 - 4xy$','$x^2 - y^2 = (x+y)(x-y)$'],a:0},
+{q:'ചതുരത്തിന്റെ നീളം കൂട്ടിയാൽ?',o:['$(x+y)(u-v)$ മാതൃക','$(x+y)(u+v)$ മാതൃക'],a:0}
+];
+let cti=0,cts=0;
+function initChapterTest(){cti=0;cts=0;document.getElementById('ctResultArea').style.display='none';document.getElementById('ctQuestionArea').style.display='block';loadCT();}
+function loadCT(){document.getElementById('ctProgress').innerText=(cti+1)+'/15';const q=ctData[cti];document.getElementById('ctQuestionText').innerText=(cti+1)+'. '+q.q;const og=document.getElementById('ctOptionsGrid');og.innerHTML='';q.o.forEach((o,i)=>{const b=document.createElement('button');b.className='quiz-opt py-3 text-left pl-4';b.innerText=o;b.onclick=()=>chkCT(i,b);og.appendChild(b);});}
+function chkCT(i,btn){const c=ctData[cti].a;document.querySelectorAll('#ctOptionsGrid .quiz-opt').forEach(b=>b.disabled=true);if(i===c){btn.classList.add('bg-green-100','border-emerald-500');cts++;}else{btn.classList.add('bg-red-100','border-rose-500');document.querySelectorAll('#ctOptionsGrid .quiz-opt')[c].classList.add('bg-green-100','border-emerald-500');}setTimeout(()=>{cti++;if(cti<ctData.length)loadCT();else{document.getElementById('ctQuestionArea').style.display='none';document.getElementById('ctResultArea').style.display='block';document.getElementById('ctFinalScore').innerText=cts;}},1000);}
+
+function downloadPDF(){html2pdf().set({margin:12,filename:'Std9_Maths_Ch4_UnitTest.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}}).from(document.getElementById('printableQP')).save();}
+
+window.onload=()=>{initPrac1();initPrac2();initPrac3();initPrac4();initPrac5();initPrac6();initLog1();initLog2();initLog3();initLog4();initTFL();initMem();initRace();initQuick();initTrueFalse();initFillBlank();initMatchGame();};
+</script>
+</body>
+</html>
